@@ -7,7 +7,7 @@ import os
 ##########################################################################################################################################################################################
 # Main 
 
-def main(fdir):
+def main(fdir, verbose):
 
     # Read file 
     centers = create_df(np.loadtxt(fname=f"{fdir}/centers.txt")) 
@@ -17,7 +17,7 @@ def main(fdir):
     cosmic_ray = 1.0
 
     #################### Create .in files
-    for row, center in centers.iloc[0:1].iterrows():
+    for row, center in centers.iterrows():
 
 
         directory_name = f"hden{center['log_hden']:.5f}_metallicity{center['log_metallicity']:.5f}_turbulence{center['log_turbulence']:.5f}_isrf{center['log_isrf']:.5f}_radius{center['log_radius']:.5f}"
@@ -44,7 +44,7 @@ def main(fdir):
                 print(f"Directory {directory_name} created!\n")            
             
         except FileExistsError:
-            print(f"Directory {directory_name} already exists. Only checking to create .in file. \n")
+            if (verbose): print(f"Directory {directory_name} already exists. Only checking to create .in file. \n")
 
             # Check if file exits.
             if not os.path.isfile(file_name): 
@@ -55,10 +55,12 @@ def main(fdir):
                     cosmic_ray = cosmic_ray
                 )
             else: # File exists. Do not create new.
-                print(f".in file exists: {directory_name}.\n")
+                if (verbose): print(f".in file exists: {directory_name}.\n")
+                pass
 
         except Exception as e:
-            print(f"Unable to create directory: {directory_name}. Error: {e}\n")
+            if (verbose): print(f"Unable to create directory: {directory_name}. Error: {e}\n")
+            pass
             # Break from the program or handle the error    
 
 
@@ -161,4 +163,4 @@ if __name__ == "__main__":
     # Niagara clusters
     fdir = "/scratch/m/murray/dtolgay/cloudy_runs/z_0/cr_1_CO87_CII_H_O3/cr_1_CO87_CII_H_O3_metallicity_above_minus_2"
 
-    main(fdir=fdir)
+    main(fdir=fdir, verbose=False)
