@@ -3,3 +3,5 @@ z_3/
 *.err
 *.out
 *.str
+.ipynb_checkpoints/
+testing_clumping_factor/
